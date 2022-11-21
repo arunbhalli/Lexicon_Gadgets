@@ -3,7 +3,6 @@ from django.conf.urls.static import static
 from lexiconapp import views
 from django.urls import path
 
-
 urlpatterns = [
     path('', views.index, name='base'),
     path('orderall/', views.orderall, name='orderall'),
@@ -21,6 +20,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('profileall/', views.profileall, name='profileall'),
     path('updateprofile/', views.updateprofile, name='updateprofile'),
+  
 ]
 
 if settings.DEBUG:
