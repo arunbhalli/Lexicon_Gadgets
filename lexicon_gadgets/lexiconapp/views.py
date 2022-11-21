@@ -8,6 +8,7 @@ from lexiconapp import forms
 from django.contrib.auth.forms import UserChangeForm
 from .models import ProfileUpdateForm,UserUpdateForm
 from django.urls import reverse
+
 from django.template import loader
 # Create your views here.
 
@@ -242,16 +243,10 @@ def updateprofile(request):
 
     return render(request, 'lexiconapp/updateprofile.html', context)
     # Redirect back to profile page
+# search functionality
 
-@user_passes_test(check_admin,login_url='/login')
-def profileall(request):
-
-    users = User.objects.all()
-    p_form = ProfileUpdateForm.Meta.fields
-
-    context = {
-        'p_form': p_form,
-        'users': users,
-    }
-    print(p_form)
-    return render(request, 'lexiconapp/profileall.html', context)
+def search(request):
+    query = request.GET.get('query')
+    item_list = Product.objects.filter(title__icontains=query)
+    params = {'items': item_list, }
+    return render(request, 'lexiconapp/card.html', params)
