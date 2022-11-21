@@ -196,7 +196,7 @@ def contact(request):
     return render(request, 'lexiconapp/contact.html')
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def profile(request):
     if request.method == 'POST':
         p_form = ProfileUpdateForm(request.POST,
@@ -217,7 +217,7 @@ def profile(request):
     return render(request, 'lexiconapp/profile.html', context)
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def updateprofile(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
