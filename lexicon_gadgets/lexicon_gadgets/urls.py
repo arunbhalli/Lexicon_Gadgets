@@ -13,19 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 from lexiconapp import views
-
-
-
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("",include('lexiconapp.urls')),
-    path('login',views.userlogin, name='userlogin'),
-  
+    path("", include('lexiconapp.urls')),
+    path('login', views.userlogin, name='userlogin'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-]
 handler404 = 'lexiconapp.views.error_404_view'

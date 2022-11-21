@@ -1,4 +1,5 @@
-
+from django.conf import settings
+from django.conf.urls.static import static
 from lexiconapp import views
 from django.urls import path
 
@@ -17,4 +18,9 @@ urlpatterns = [
     path("signup", views.signup, name='signup'),
     path('orders/', views.orderbyuser, name='orders'),
     path('contact/', views.contact, name='contact'),
+    path('profile/', views.profile, name='profile'),
+    path('updateprofile/', views.updateprofile, name='updateprofile'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
