@@ -49,7 +49,7 @@ def signup(request):
         # checks for error inputs
         user = User.objects.create_user(username, email, pass1)
         user.save()
-        customer = Customer(user=user,name=username,email=email)
+        customer = Customer(user=user,name=username)
         customer.save()
         messages.info(request, 'Thanks For Signing Up')
         # messages.info(request,"Signup Successful Please Login")
@@ -195,6 +195,16 @@ def contact(request):
         messages.success(request, "Your message has been successfully sent")
     return render(request, 'lexiconapp/contact.html')
 
+@user_passes_test(check_admin,login_url='/login')
+def contactall(request):
+    
+    contacts = Contact.objects.all()
+        
+    context = {
+        'contacts': contacts,
+    }
+    return render(request, 'lexiconapp/contactall.html',context)
+
 
 @login_required(login_url='login')
 def profile(request):
@@ -215,6 +225,19 @@ def profile(request):
     }
 
     return render(request, 'lexiconapp/profile.html', context)
+
+@user_passes_test(check_admin,login_url='/login')
+def profileall(request):
+    
+    p_form = ProfileUpdateForm.Meta.fields
+    users = User.objects.all()
+
+    context = {
+        'p_form': p_form,
+        'users': users,
+    }
+
+    return render(request, 'lexiconapp/profileall.html', context)
 
 
 @login_required(login_url='login')

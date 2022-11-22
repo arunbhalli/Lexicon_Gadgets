@@ -1,9 +1,9 @@
-lexicon_gadgets/lexiconapp/__pycache__
-lexicon_gadgets/lexicon_gadgets/__pycache__
-lexicon_gadgets/lexiconapp/migrations/__pycache__/
-lexicon_gadgets/db.sqlite3
-lexicon_gadgets/lexicon_gadgets/__pycache__/*
-lexicon_gadgets/lexiconapp/__pycache__/*
-lexicon_gadgets/lexicon_gadgets/__pycache__/settings.cpython-310.pyc
-lexicon_gadgets/lexicon_gadgets/__pycache__/urls.cpython-310.pyc
-lexicon_gadgets/lexicon_gadgets/__pycache__/wsgi.cpython-310.pyc
+# lexicon_gadgets/lexiconapp/__pycache__
+# lexicon_gadgets/lexicon_gadgets/__pycache__
+# lexicon_gadgets/lexiconapp/migrations/__pycache__/
+# lexicon_gadgets/db.sqlite3
+# lexicon_gadgets/lexicon_gadgets/__pycache__/*
+# lexicon_gadgets/lexiconapp/__pycache__/*
+# lexicon_gadgets/lexicon_gadgets/__pycache__/settings.cpython-310.pyc
+# lexicon_gadgets/lexicon_gadgets/__pycache__/urls.cpython-310.pyc
+# lexicon_gadgets/lexicon_gadgets/__pycache__/wsgi.cpython-310.pyc
