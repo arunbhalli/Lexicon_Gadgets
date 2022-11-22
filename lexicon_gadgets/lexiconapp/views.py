@@ -196,6 +196,16 @@ def contact(request):
     return render(request, 'lexiconapp/contact.html')
 
 
+def contactall(request):
+    
+    contacts = Contact.objects.all()
+        
+    context = {
+        'contacts': contacts,
+    }
+    return render(request, 'lexiconapp/contactall.html',context)
+
+
 @login_required(login_url='login')
 def profile(request):
     if request.method == 'POST':
