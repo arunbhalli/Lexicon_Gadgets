@@ -272,3 +272,7 @@ def search(request):
     item_list = Product.objects.filter(title__icontains=query)
     params = {'items': item_list, }
     return render(request, 'lexiconapp/card.html', params)
+
+def adminpage(request):
+
+    return render(request, 'lexiconapp/adminpage.html')

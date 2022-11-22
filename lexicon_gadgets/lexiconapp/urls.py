@@ -22,7 +22,7 @@ urlpatterns = [
     path('adminpage/profile/', views.profileall, name='adminpageprofile'),
     path('updateprofile/', views.updateprofile, name='updateprofile'),
     path('search/', views.search, name='search'),
-  
+    path('adminpage/', views.adminpage, name='adminpage'),
 ]
 
 if settings.DEBUG:
