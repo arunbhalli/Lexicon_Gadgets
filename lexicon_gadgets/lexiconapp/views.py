@@ -8,6 +8,7 @@ from lexiconapp import forms
 from django.contrib.auth.forms import UserChangeForm
 from .models import ProfileUpdateForm,UserUpdateForm
 from django.urls import reverse
+
 from django.template import loader
 # Create your views here.
 
@@ -48,7 +49,7 @@ def signup(request):
         # checks for error inputs
         user = User.objects.create_user(username, email, pass1)
         user.save()
-        customer = Customer(user=user,name=username,email=email)
+        customer = Customer(user=user,name=username)
         customer.save()
         messages.info(request, 'Thanks For Signing Up')
         # messages.info(request,"Signup Successful Please Login")
@@ -78,13 +79,21 @@ def userlogin(request):
 
     return render(request, 'lexiconapp/login.html', {'login_form': login_form})
 
-@login_required
-def orderconf(request):
-    # need to take orderno from order model
-    customer = Customer.objects.get(name=request.user)
-    orderno = Order.objects.get(customer=customer)
-    t_id=orderno.transaction_id
-    return HttpResponse("Your order is placed. order no {}".format(t_id))
+@user_passes_test(check_admin,login_url='/login')
+def orderall(request):
+    customer = Customer.objects.all()
+    orders = Order.objects.all()
+    orderitems = OrderItem.objects.all()
+    shippingaddress = ShippingAddress.objects.all()
+
+
+    context = {
+    'customer': customer,
+    'orders': orders,
+    'orderitems' : orderitems,
+    'shippingaddress' : shippingaddress,
+    }    
+    return render(request, 'lexiconapp/orders.html', context)
 
 @login_required
 def orderbyuser(request):
@@ -115,11 +124,12 @@ def card(request):
     context = {'items': item_list, }
     return render(request, 'lexiconapp/card.html', context)
 
+@user_passes_test(check_admin,login_url='/login')
 def add(request):
     template = loader.get_template('lexiconapp/add.html')
     return HttpResponse(template.render({}, request))
 
-@user_passes_test(check_admin)
+@user_passes_test(check_admin,login_url='/login')
 def addrecord(request):
     a = request.POST.get('Title', False)
     d = request.POST.get('Description', False)
@@ -133,6 +143,7 @@ def addrecord(request):
     return HttpResponseRedirect(reverse('card'))
 
 # update record
+@user_passes_test(check_admin,login_url='/login')
 def updaterecord(request, id):
     a = request.POST.get('Title', False)
     d = request.POST.get('Description', False)
@@ -150,11 +161,13 @@ def updaterecord(request, id):
     product.save()
     return HttpResponseRedirect(reverse('card'))
 
+@user_passes_test(check_admin,login_url='/login')
 def delete(request, id):
     product = Product.objects.get(id=id)
     product.delete()
     return HttpResponseRedirect(reverse('card'))
 
+@user_passes_test(check_admin,login_url='/login')
 def update(request, id):
     selected_product = Product.objects.get(id=id)
     template = loader.get_template('lexiconapp/update.html')
@@ -182,6 +195,16 @@ def contact(request):
         messages.success(request, "Your message has been successfully sent")
     return render(request, 'lexiconapp/contact.html')
 
+@user_passes_test(check_admin,login_url='/login')
+def contactall(request):
+    
+    contacts = Contact.objects.all()
+        
+    context = {
+        'contacts': contacts,
+    }
+    return render(request, 'lexiconapp/contactall.html',context)
+
 
 @login_required(login_url='login')
 def profile(request):
@@ -202,6 +225,19 @@ def profile(request):
     }
 
     return render(request, 'lexiconapp/profile.html', context)
+
+@user_passes_test(check_admin,login_url='/login')
+def profileall(request):
+    
+    p_form = ProfileUpdateForm.Meta.fields
+    users = User.objects.all()
+
+    context = {
+        'p_form': p_form,
+        'users': users,
+    }
+
+    return render(request, 'lexiconapp/profileall.html', context)
 
 
 @login_required(login_url='login')
@@ -229,3 +265,10 @@ def updateprofile(request):
 
     return render(request, 'lexiconapp/updateprofile.html', context)
     # Redirect back to profile page
+# search functionality
+
+def search(request):
+    query = request.GET.get('query')
+    item_list = Product.objects.filter(title__icontains=query)
+    params = {'items': item_list, }
+    return render(request, 'lexiconapp/card.html', params)

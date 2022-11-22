@@ -1,17 +1,20 @@
 {% extends 'lexiconapp/base.html' %} {% load crispy_forms_tags %} {% block body_block %}
+
+{% for user in users %}
 <section >
   <div class="container py-5">
     <div class="row">
-      <div class="col-lg-4" id="profile-pic">
-        <div class="card mb-4" >
+      <div class="col-lg-4">
+        <div class="card mb-4">
           <div class="card-body text-center">
             <img
             src="{{ user.profile.image.url }}"
               alt="avatar"
               class="rounded-circle img-fluid"
-              style="width: 13.75em; height: 12.5em;"
+              style="width: 13.75em; height: 10.3em;"
             />
             <h5 class="my-3"> {{ user.username }}</h5>
+          
           </div>
         </div>
       </div>
@@ -54,7 +57,7 @@
               </div>
             </div>
             <br>
-            <a  href="{% url 'updateprofile' %}" class="btn btn-outline-info">Update</a>
+            
           </div>
         </div>
         </div>
@@ -62,4 +65,5 @@
     </div>
   </div>
 </section>
+{% endfor %}
 {% endblock %}
