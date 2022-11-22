@@ -86,7 +86,7 @@ def orderall(request):
     orderitems = OrderItem.objects.all()
     shippingaddress = ShippingAddress.objects.all()
 
-    
+
     context = {
     'customer': customer,
     'orders': orders,
@@ -143,7 +143,6 @@ def addrecord(request):
     return HttpResponseRedirect(reverse('card'))
 
 # update record
-
 @user_passes_test(check_admin,login_url='/login')
 def updaterecord(request, id):
     a = request.POST.get('Title', False)
