@@ -1,3 +1,4 @@
+from itertools import product
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -8,7 +9,7 @@ from lexiconapp import forms
 from django.contrib.auth.forms import UserChangeForm
 from .models import ProfileUpdateForm,UserUpdateForm
 from django.urls import reverse
-
+from django.views.generic import ListView,DetailView
 from django.template import loader
 # Create your views here.
 
@@ -272,3 +273,11 @@ def search(request):
     item_list = Product.objects.filter(title__icontains=query)
     params = {'items': item_list, }
     return render(request, 'lexiconapp/card.html', params)
+
+class ItemDetailView(DetailView):
+    model= Product
+    template_name: "product.html"
+    
+class ItemDetailView(DetailView):
+    model = Product
+    template_name = "lexiconapp/product.html"

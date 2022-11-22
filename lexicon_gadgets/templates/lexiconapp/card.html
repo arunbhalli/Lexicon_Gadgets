@@ -4,10 +4,13 @@
   <div class="card" style="width: 18rem">
     <img src="{{item.images}}" class="card-img-top" alt="..." />
     <div class="card-body">
-      <h5 class="card-title">{{item.title}}</h5>
+      <a href="{% url 'productview' item.slug %}" class=""
+        ><h5 class="card-title">{{item.title}}</h5></a
+      >
       <p class="card-item">{{item.brand}}</p>
       <p class="card-item">{{item.description}}</p>
       <p class="card-item">{{item.price}}</p>
+
       <a href="#" class="btn btn-primary">ADD</a>
     </div>
     {% if user.is_superuser %}

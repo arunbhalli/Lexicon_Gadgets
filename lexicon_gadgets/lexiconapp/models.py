@@ -1,22 +1,35 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django import forms
-
+from django.template.defaultfilters import slugify 
+from django.shortcuts import reverse
 # Create your models here.
-
+CATEGORIES = (
+        ('CO','Computers'),
+        ('HA','Home Aplliances'),
+        ('MS','Mobiles & Smartwatch'),
+        ('S','Sound')
+    )
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     price = models.FloatField()
     brand = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
+    category = models.CharField(choices=CATEGORIES,max_length=255)
     images = models.URLField(max_length=255)
-
+    slug = models.SlugField()
     def __str__(self):
         return self.title
-
-
+    
+    def get_absolute_url(self):
+        return reverse("item", kwargs={
+            'slug': self.slug
+        })
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
 # class Basket(models.Model):
 #             user = models.ForeignKey(User, on_delete=models.CASCADE)
 #             product = models.ForeignKey(Product, on_delete=models.CASCADE)

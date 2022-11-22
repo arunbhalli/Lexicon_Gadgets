@@ -2,12 +2,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from lexiconapp import views
 from django.urls import path
-
+from .views import ItemDetailView
 urlpatterns = [
     path('', views.index, name='base'),
     path('orderall/', views.orderall, name='orderall'),
     path('logout/', views.userlogout, name='userlogout'),
-    path('card', views.card, name='card'),
+    path("card1/<str:slug>", ItemDetailView.as_view(), name='productview'),
+    path('card/', views.card, name='card'),
     path('lexiconapp/add/', views.add, name='add'),
     path('lexiconapp/add/addrecord/', views.addrecord, name='addrecord'),
     path('lexiconapp/delete/<int:id>', views.delete, name='delete'),
@@ -22,8 +23,8 @@ urlpatterns = [
     path('profileall/', views.profileall, name='profileall'),
     path('updateprofile/', views.updateprofile, name='updateprofile'),
     path('search/', views.search, name='search'),
-  
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
