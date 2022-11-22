@@ -19,6 +19,7 @@ urlpatterns = [
     path('orders/', views.orderbyuser, name='orders'),
     path('contact/', views.contact, name='contact'),
     path('profile/', views.profile, name='profile'),
+    path('profileall/', views.profileall, name='profileall'),
     path('updateprofile/', views.updateprofile, name='updateprofile'),
 ]
 

@@ -196,7 +196,7 @@ def contact(request):
     return render(request, 'lexiconapp/contact.html')
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def profile(request):
     if request.method == 'POST':
         p_form = ProfileUpdateForm(request.POST,
@@ -217,7 +217,7 @@ def profile(request):
     return render(request, 'lexiconapp/profile.html', context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def updateprofile(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
@@ -242,3 +242,16 @@ def updateprofile(request):
 
     return render(request, 'lexiconapp/updateprofile.html', context)
     # Redirect back to profile page
+
+@user_passes_test(check_admin,login_url='/login')
+def profileall(request):
+
+    users = User.objects.all()
+    p_form = ProfileUpdateForm.Meta.fields
+
+    context = {
+        'p_form': p_form,
+        'users': users,
+    }
+    print(p_form)
+    return render(request, 'lexiconapp/profileall.html', context)
