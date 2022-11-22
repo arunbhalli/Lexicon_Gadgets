@@ -195,7 +195,7 @@ def contact(request):
         messages.success(request, "Your message has been successfully sent")
     return render(request, 'lexiconapp/contact.html')
 
-
+@user_passes_test(check_admin,login_url='/login')
 def contactall(request):
     
     contacts = Contact.objects.all()
@@ -226,7 +226,7 @@ def profile(request):
 
     return render(request, 'lexiconapp/profile.html', context)
 
-
+@user_passes_test(check_admin,login_url='/login')
 def profileall(request):
     
     p_form = ProfileUpdateForm.Meta.fields
