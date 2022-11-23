@@ -284,15 +284,16 @@ def add_to_cart(request,slug):
     item = get_object_or_404(Product,slug=slug)
     print( item)
     order_item= OrderItem.objects.create(item=item)
+    print( order_item)
     order_qs = Order.objects.filter(pk=request.user.pk,complete=False)
-    if order_qs:
+    if order_qs.exists():
         order = order_qs[0]
         print(order)
         if order.item.filter(item_slug=item.slug).exists():
             order_item.quantity += 1
             order_item.save()
     else: 
-        order = Order.objects.create(pk=request.user.pk)
-        order.item.add(order_item)
-    return redirect('productview',kwargs={'slug':slug})
+        order = Order.objects.create(user=request.user)
+        order.items.add(order_item)
+    return redirect('product-view',slug=slug)
             
