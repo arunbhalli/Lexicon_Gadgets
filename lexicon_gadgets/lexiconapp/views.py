@@ -1,5 +1,5 @@
 from itertools import product
-from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect,get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -274,10 +274,19 @@ def search(request):
     params = {'items': item_list, }
     return render(request, 'lexiconapp/card.html', params)
 
-class ItemDetailView(DetailView):
-    model= Product
-    template_name: "product.html"
     
 class ItemDetailView(DetailView):
     model = Product
     template_name = "lexiconapp/product.html"
+    
+    
+def add_to_cart(request,slug):
+    item = get_object_or_404(Product,slug=slug)
+    order_item= OrderItem.objects.create(item=item)
+    order_qs = Order.objects.filter(customer=request.user,complete=False)
+    if order_qs.exist():
+        order = order_qs[0]
+        if order.item.filter(item_slug=item.slug).exists():
+            order_item.quantity += 1
+            order_item.save()
+            
