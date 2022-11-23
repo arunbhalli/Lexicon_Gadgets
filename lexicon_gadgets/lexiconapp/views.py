@@ -292,15 +292,18 @@ class ItemDetailView(DetailView):
 
 def add_to_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
-    print(item)
-    order_item = OrderItem.objects.create(item=item)
-    print(order_item)
-    order_qs = Order.objects.filter(pk=request.user.pk, complete=False)
-    if order_qs.exists():
+    order_item,created= OrderItem.objects.get_or_create(
+        item=item, 
+        user=request.user,
+        complete=False
+    )
+    order_qs = Order.objects.filter(user=request.user, complete=False)
+    if order_qs:
         order = order_qs[0]
-        print(order)
-        if order.item.filter(item_slug=item.slug).exists():
-            order_item.quantity += 1
+        print()
+        if order.items.filter(item__slug=item.slug):
+            order_item.quantity +=1 
+            print(order_item.quantity)
             order_item.save()
         else:
             order.items.add(order_item)

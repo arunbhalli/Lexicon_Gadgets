@@ -47,14 +47,15 @@ class Customer(models.Model):
     def __str__(self):
         return self.name
 class OrderItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    complete = models.BooleanField(default=False)
     item = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    quantity = models.IntegerField(default=1, null=True, blank=True)
+    quantity = models.IntegerField(default=1)
     date_added = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return  f"{self.item}"
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    print(user.name)
     items = models.ManyToManyField(OrderItem)
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
