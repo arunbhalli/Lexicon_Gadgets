@@ -292,22 +292,50 @@ class ItemDetailView(DetailView):
 
 def add_to_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
-    order_item,created= OrderItem.objects.get_or_create(
-        item=item, 
+    order_item, created = OrderItem.objects.get_or_create(
+        item=item,
         user=request.user,
         complete=False
     )
     order_qs = Order.objects.filter(user=request.user, complete=False)
     if order_qs:
         order = order_qs[0]
-        print()
         if order.items.filter(item__slug=item.slug):
-            order_item.quantity +=1 
+            order_item.quantity += 1
             print(order_item.quantity)
             order_item.save()
+            messages.info(
+                request, "This item quantity was updated successfully")
         else:
             order.items.add(order_item)
+            messages.info(request, "This item  was added to your basket")
+            return redirect('product-view', slug=slug)
     else:
         order = Order.objects.create(user=request.user)
         order.items.add(order_item)
+        messages.info(request, "This item  was added to your basket")
+        return redirect('product-view', slug=slug)
+    return redirect('product-view', slug=slug)
+
+
+def remove_from_cart(request, slug):
+    item = get_object_or_404(Product, slug=slug)
+    order_qs = Order.objects.filter(user=request.user, complete=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.items.filter(item__slug=item.slug).exists():
+            order_item = OrderItem.objects.filter(
+                item=item,
+                user=request.user,
+                complete=False
+            )[0]
+            order.items.remove(order_item)
+            order_item.delete()
+            messages.info(request, "This item was removed from your cart.")
+        else:
+            messages.info(request, "This item was not in your cart")
+            return redirect('product-view', slug=slug)
+    else:
+        messages.info(request, "You do not have an active order")
+        return redirect('product-view', slug=slug)
     return redirect('product-view', slug=slug)
