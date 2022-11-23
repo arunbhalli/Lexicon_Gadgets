@@ -58,9 +58,6 @@
            <li class="nav-item">
               <a class="nav-link" href="{% url 'profile' %}">profile</a>
             </li> 
-            {% comment %} <li class="nav-item">
-              <a class="nav-link" href="{% url 'item' %}">product1</a>
-            </li>  {% endcomment %}
         {% else %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'signup' %}">SignUp</a>
@@ -75,10 +72,9 @@
             </li>
             {% endif %}
             <li class="nav-item">
-              <a href="{% url 'profile' %}" class="nav-link waves-effect">
+              <a  href="{% url 'order-summary' %}" class="nav-link waves-effect">
                 <span class="badge red z-depth-1 mr-1" style="color:red;">{{ request.user|cart_item_count }} </span>
                 <i class="bi bi-cart-check"></i>
-        
               </a>
             </li>
           </ul>

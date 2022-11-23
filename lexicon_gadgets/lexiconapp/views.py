@@ -1,7 +1,7 @@
-from itertools import product
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from lexiconapp.models import *
@@ -306,6 +306,7 @@ def add_to_cart(request, slug):
             order_item.save()
             messages.info(
                 request, "This item quantity was updated successfully")
+            return redirect('order-summary')
         else:
             order.items.add(order_item)
             messages.info(request, "This item  was added to your basket")
@@ -340,8 +341,42 @@ def remove_from_cart(request, slug):
         return redirect('product-view', slug=slug)
     return redirect('product-view', slug=slug)
 
+@login_required
+def remove_single_item_from_cart(request, slug):
+    item = get_object_or_404(Product, slug=slug)
+    order_qs = Order.objects.filter(user=request.user, complete=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.items.filter(item__slug=item.slug).exists():
+            order_item = OrderItem.objects.filter(
+                item=item,
+                user=request.user,
+                complete=False
+            )[0]
+            if order_item.quantity > 1:
+                order_item.quantity -= 1
+                order_item.save()
+            else:
+                order.items.remove(order_item) 
+            messages.info(request, "This item quantity was updated.")              
+            return redirect("order-summary")
+        else:
+            messages.info(request, "This item was not in your cart")
+            return redirect('product-view', slug=slug)
+    else:
+        messages.info(request, "You do not have an active order")
+        return redirect('product-view', slug=slug)
+
 class OrderSummaryView(View):
-    def get(self,  *args, **kwargs):
-        return render(self.request, 'lexiconapp/order_summary.html')
+    def get(self, *args, **kwargs):
+        try:
+            order = Order.objects.get(user=self.request.user, complete=False)
+            context = {
+                'object': order
+            }
+            return render(self.request, 'lexiconapp/order_summary.html', context)
+        except ObjectDoesNotExist:
+            messages.warning(self.request, "You do not have an active order")
+            return redirect(self.request, 'lexiconapp/order_summary.html')
        
     
