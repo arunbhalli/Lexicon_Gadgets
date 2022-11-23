@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from lexiconapp import views
+from .views import OrderSummaryView
 from django.urls import path
 from .views import ItemDetailView
 urlpatterns = [
@@ -11,6 +12,7 @@ urlpatterns = [
     path("card1/add-to-cart/<str:slug>", views.add_to_cart, name='add-to-cart'),
     path("card1/remove-from-cart/<str:slug>", views.remove_from_cart, name='remove-from-cart'),
     path('card/', views.card, name='card'),
+    path('order-summary/', OrderSummaryView.as_view(), name='order-summary'),
     path('lexiconapp/add/', views.add, name='add'),
     path('lexiconapp/add/addrecord/', views.addrecord, name='addrecord'),
     path('lexiconapp/delete/<str:slug>', views.delete, name='delete'),

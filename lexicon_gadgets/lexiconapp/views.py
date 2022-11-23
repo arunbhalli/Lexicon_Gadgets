@@ -9,7 +9,7 @@ from lexiconapp import forms
 from django.contrib.auth.forms import UserChangeForm
 from .models import ProfileUpdateForm, UserUpdateForm
 from django.urls import reverse
-from django.views.generic import ListView, DetailView
+from django.views.generic import View,ListView, DetailView
 from django.template import loader
 # Create your views here.
 
@@ -339,3 +339,9 @@ def remove_from_cart(request, slug):
         messages.info(request, "You do not have an active order")
         return redirect('product-view', slug=slug)
     return redirect('product-view', slug=slug)
+
+class OrderSummaryView(View):
+    def get(self,  *args, **kwargs):
+        return render(self.request, 'lexiconapp/order_summary.html')
+       
+    
