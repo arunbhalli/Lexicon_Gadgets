@@ -8,6 +8,7 @@ urlpatterns = [
     path('orderall/', views.orderall, name='orderall'),
     path('logout/', views.userlogout, name='userlogout'),
     path("card1/<str:slug>", ItemDetailView.as_view(), name='productview'),
+     path("card1/add-to-cart/<str:slug>", views.add_to_cart, name='add-to-cart'),
     path('card/', views.card, name='card'),
     path('lexiconapp/add/', views.add, name='add'),
     path('lexiconapp/add/addrecord/', views.addrecord, name='addrecord'),
