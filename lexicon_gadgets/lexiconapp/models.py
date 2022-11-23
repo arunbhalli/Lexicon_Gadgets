@@ -37,27 +37,7 @@ class Product(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
-# class Basket(models.Model):
-#             user = models.ForeignKey(User, on_delete=models.CASCADE)
-#             product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#             quantity=models.IntegerField()
-#             pass
-#             def __str__(self):
-#                     return self.title
 
-
-# class Oreder(models.Model):
-
-#             order_number=models.IntegerField()
-#             products = models.ManyToManyField(Basket)
-#             ordered = models.BooleanField(default=False)
-#             user = models.ForeignKey(User, on_delete=models.CASCADE)
-#             start_date = models.DateTimeField(auto_now_add=True)
-#             oredered_date=models.DateTimeField()
-#             user_discount=models.DecimalField()
-#             total_price=models.IntegerField()
-#             def __str__(self):
-#                     return self.user.username
 
 
 class Customer(models.Model):
@@ -136,3 +116,24 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['email']
 
+# class Basket(models.Model):
+#             user = models.ForeignKey(User, on_delete=models.CASCADE)
+#             product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#             quantity=models.IntegerField()
+#             pass
+#             def __str__(self):
+#                     return self.title
+
+
+# class Oreder(models.Model):
+
+#             order_number=models.IntegerField()
+#             products = models.ManyToManyField(Basket)
+#             ordered = models.BooleanField(default=False)
+#             user = models.ForeignKey(User, on_delete=models.CASCADE)
+#             start_date = models.DateTimeField(auto_now_add=True)
+#             oredered_date=models.DateTimeField()
+#             user_discount=models.DecimalField()
+#             total_price=models.IntegerField()
+#             def __str__(self):
+#                     return self.user.username

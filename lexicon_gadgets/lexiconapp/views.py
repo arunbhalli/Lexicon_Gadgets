@@ -1,5 +1,5 @@
 from itertools import product
-from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect,get_object_or_404
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -7,18 +7,21 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from lexiconapp.models import *
 from lexiconapp import forms
 from django.contrib.auth.forms import UserChangeForm
-from .models import ProfileUpdateForm,UserUpdateForm
+from .models import ProfileUpdateForm, UserUpdateForm
 from django.urls import reverse
-from django.views.generic import ListView,DetailView
+from django.views.generic import ListView, DetailView
 from django.template import loader
 # Create your views here.
+
 
 def check_admin(user):
     # print(user.is_superuser)
     return user.is_superuser
 
+
 def error_404_view(request, exception):
     return redirect('userlogin')
+
 
 def index(request):
     return render(request, 'lexiconapp/base.html')
@@ -50,7 +53,7 @@ def signup(request):
         # checks for error inputs
         user = User.objects.create_user(username, email, pass1)
         user.save()
-        customer = Customer(user=user,name=username)
+        customer = Customer(user=user, name=username)
         customer.save()
         messages.info(request, 'Thanks For Signing Up')
         # messages.info(request,"Signup Successful Please Login")
@@ -80,21 +83,22 @@ def userlogin(request):
 
     return render(request, 'lexiconapp/login.html', {'login_form': login_form})
 
-@user_passes_test(check_admin,login_url='/login')
+
+@user_passes_test(check_admin, login_url='/login')
 def orderall(request):
     customer = Customer.objects.all()
     orders = Order.objects.all()
     orderitems = OrderItem.objects.all()
     shippingaddress = ShippingAddress.objects.all()
 
-
     context = {
-    'customer': customer,
-    'orders': orders,
-    'orderitems' : orderitems,
-    'shippingaddress' : shippingaddress,
-    }    
+        'customer': customer,
+        'orders': orders,
+        'orderitems': orderitems,
+        'shippingaddress': shippingaddress,
+    }
     return render(request, 'lexiconapp/orders.html', context)
+
 
 @login_required
 def orderbyuser(request):
@@ -103,14 +107,12 @@ def orderbyuser(request):
     orderitems = OrderItem.objects.filter(order__in=orders)
     shippingaddress = ShippingAddress.objects.filter(order__in=orders)
 
-    
     context = {
-    'orders': orders,
-    'orderitems' : orderitems,
-    'shippingaddress' : shippingaddress,
-    }    
+        'orders': orders,
+        'orderitems': orderitems,
+        'shippingaddress': shippingaddress,
+    }
     return render(request, 'lexiconapp/orders.html', context)
-
 
 
 @login_required
@@ -125,12 +127,14 @@ def card(request):
     context = {'items': item_list, }
     return render(request, 'lexiconapp/card.html', context)
 
-@user_passes_test(check_admin,login_url='/login')
+
+@user_passes_test(check_admin, login_url='/login')
 def add(request):
     template = loader.get_template('lexiconapp/add.html')
     return HttpResponse(template.render({}, request))
 
-@user_passes_test(check_admin,login_url='/login')
+
+@user_passes_test(check_admin, login_url='/login')
 def addrecord(request):
     a = request.POST.get('Title', False)
     d = request.POST.get('Description', False)
@@ -144,7 +148,9 @@ def addrecord(request):
     return HttpResponseRedirect(reverse('card'))
 
 # update record
-@user_passes_test(check_admin,login_url='/login')
+
+
+@user_passes_test(check_admin, login_url='/login')
 def updaterecord(request, id):
     a = request.POST.get('Title', False)
     d = request.POST.get('Description', False)
@@ -162,15 +168,17 @@ def updaterecord(request, id):
     product.save()
     return HttpResponseRedirect(reverse('card'))
 
-@user_passes_test(check_admin,login_url='/login')
-def delete(request, id):
-    product = Product.objects.get(id=id)
+
+@user_passes_test(check_admin, login_url='/login')
+def delete(request, slug):
+    product = Product.objects.get(slug=slug)
     product.delete()
     return HttpResponseRedirect(reverse('card'))
 
-@user_passes_test(check_admin,login_url='/login')
-def update(request, id):
-    selected_product = Product.objects.get(id=id)
+
+@user_passes_test(check_admin, login_url='/login')
+def update(request, slug):
+    selected_product = Product.objects.get(slug=slug)
     template = loader.get_template('lexiconapp/update.html')
     context = {
         'item': selected_product,
@@ -196,15 +204,16 @@ def contact(request):
         messages.success(request, "Your message has been successfully sent")
     return render(request, 'lexiconapp/contact.html')
 
-@user_passes_test(check_admin,login_url='/login')
+
+@user_passes_test(check_admin, login_url='/login')
 def contactall(request):
-    
+
     contacts = Contact.objects.all()
-        
+
     context = {
         'contacts': contacts,
     }
-    return render(request, 'lexiconapp/contactall.html',context)
+    return render(request, 'lexiconapp/contactall.html', context)
 
 
 @login_required(login_url='login')
@@ -227,9 +236,10 @@ def profile(request):
 
     return render(request, 'lexiconapp/profile.html', context)
 
-@user_passes_test(check_admin,login_url='/login')
+
+@user_passes_test(check_admin, login_url='/login')
 def profileall(request):
-    
+
     p_form = ProfileUpdateForm.Meta.fields
     users = User.objects.all()
 
@@ -252,7 +262,7 @@ def updateprofile(request):
             u_form.save()
             p_form.save()
             messages.success(request, f'Your account has been updated!')
-            return redirect('profile') # Redirect back to profile page
+            return redirect('profile')  # Redirect back to profile page
 
     else:
         u_form = UserUpdateForm(instance=request.user)
@@ -263,10 +273,10 @@ def updateprofile(request):
         'p_form': p_form
     }
 
-
     return render(request, 'lexiconapp/updateprofile.html', context)
     # Redirect back to profile page
 # search functionality
+
 
 def search(request):
     query = request.GET.get('query')
@@ -274,18 +284,18 @@ def search(request):
     params = {'items': item_list, }
     return render(request, 'lexiconapp/card.html', params)
 
-    
+
 class ItemDetailView(DetailView):
     model = Product
     template_name = "lexiconapp/product.html"
-    
-    
-def add_to_cart(request,slug):
-    item = get_object_or_404(Product,slug=slug)
-    print( item)
-    order_item= OrderItem.objects.create(item=item)
-    print( order_item)
-    order_qs = Order.objects.filter(pk=request.user.pk,complete=False)
+
+
+def add_to_cart(request, slug):
+    item = get_object_or_404(Product, slug=slug)
+    print(item)
+    order_item = OrderItem.objects.create(item=item)
+    print(order_item)
+    order_qs = Order.objects.filter(pk=request.user.pk, complete=False)
     if order_qs.exists():
         order = order_qs[0]
         print(order)
@@ -294,8 +304,7 @@ def add_to_cart(request,slug):
             order_item.save()
         else:
             order.items.add(order_item)
-    else: 
+    else:
         order = Order.objects.create(user=request.user)
         order.items.add(order_item)
-    return redirect('product-view',slug=slug)
-            
+    return redirect('product-view', slug=slug)
