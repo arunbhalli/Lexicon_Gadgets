@@ -1,6 +1,3 @@
-body {
-  background-color: rgba(182, 58, 226, 0.262);
-}
 
 .cart {
   color: black;
@@ -22,8 +19,18 @@ footer {
 }
 
 
+h4 {
+  color: red;
+}
 
 
+h1{
 
+  color: red;
+}
 
-
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
