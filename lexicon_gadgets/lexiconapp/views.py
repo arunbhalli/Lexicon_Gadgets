@@ -425,16 +425,23 @@ class CheckoutView(View):
 def conforder(request):
     basketorders = BasketOrder.objects.filter(user=request.user)
     basketitems = BasketItem.objects.filter(user=request.user)
+    checkoutaddress = CheckoutAddress.objects.filter(user=request.user)
     customer = Customer.objects.get(name=request.user)
     product = []
     quantity = []
     transaction_id = get_random_string(length=32)
-    for basketorder in basketorders:
-        
-        user = basketorder.user
-        orderitems = basketorder.items
-        date_ordered = basketorder.date_ordered
-        # print(basketorder)
+    
+    # for basketorder in basketorders:
+    #     user = basketorder.user
+    #     orderitems = basketorder.items
+    #     date_ordered = basketorder.date_ordered
+    #     print(basketorder)
+
+    for address in checkoutaddress:
+        street_address = address.street_address
+        apartment_address = address.apartment_address
+        country = address.country
+        zip = address.zip
 
 
     count=0
@@ -453,6 +460,15 @@ def conforder(request):
     order.transaction_id = transaction_id
     order.save()
     
+    shipping = ShippingAddress()
+    shipping.customer = customer
+    shipping.order = order
+    shipping.address = street_address
+    shipping.city = country
+    shipping.state = country
+    shipping.zipcode = zip
+    shipping.save()
+
     
     count=0
     for i in product:
@@ -469,6 +485,7 @@ def conforder(request):
 
     basketorders.delete()
     basketitems.delete()
+    checkoutaddress.delete()
 
     print(product,quantity)
     print(transaction_id)
