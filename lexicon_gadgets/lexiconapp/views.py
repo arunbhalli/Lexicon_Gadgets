@@ -12,6 +12,7 @@ from .models import ProfileUpdateForm, UserUpdateForm, CheckoutAddress
 from django.urls import reverse
 from django.views.generic import View, DetailView
 from django.template import loader
+from django.utils.crypto import get_random_string
 # Create your views here.
 
 
@@ -413,7 +414,7 @@ class CheckoutView(View):
                 checkout_address.save()
                 order.checkout_address = checkout_address
                 order.save()
-                return redirect('checkout')
+                return redirect('conforder')
             messages.warning(self.request, "Failed Checkout")
             return redirect('checkout')
 
@@ -421,6 +422,57 @@ class CheckoutView(View):
             messages.error(self.request, "You do not have an order")
             return redirect("order-summary")
 
+def conforder(request):
+    basketorders = BasketOrder.objects.filter(user=request.user)
+    basketitems = BasketItem.objects.filter(user=request.user)
+    customer = Customer.objects.get(name=request.user)
+    product = []
+    quantity = []
+    transaction_id = get_random_string(length=32)
+    for basketorder in basketorders:
+        
+        user = basketorder.user
+        orderitems = basketorder.items
+        date_ordered = basketorder.date_ordered
+        # print(basketorder)
+
+
+    count=0
+    for basketitem in basketitems:
+        
+        product.insert(count,basketitem.item)
+        quantity.insert(count,basketitem.quantity)
+        count=+1
+    
+    
+    
+    order = Order()
+    order.customer = customer
+    # order.date_ordered = date_ordered
+    order.complete = True
+    order.transaction_id = transaction_id
+    order.save()
+    
+    
+    count=0
+    for i in product:
+        if count <= len(product):
+            orderitem = OrderItem()
+            orderitem.order = order
+            orderitem.product = product[count]
+            orderitem.quantity = quantity[count]
+            orderitem.save()
+            count=+1
+
+    
+     
+
+    basketorders.delete()
+    basketitems.delete()
+
+    print(product,quantity)
+    print(transaction_id)
+    return redirect('userlogin')
 
  
 def adminpage(request):
