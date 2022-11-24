@@ -9,7 +9,7 @@ from .views import CheckoutView
 from django.urls import path
 urlpatterns = [
     path('', views.index, name='base'),
-    path('orderall/', views.orderall, name='orderall'),
+    path('adminpage/orders/', views.ordersall, name='adminpageorders'),
     path('logout/', views.userlogout, name='userlogout'),
     path("card1/<str:slug>", ItemDetailView.as_view(), name='product-view'),
     path("card1/add-to-cart/<str:slug>", views.add_to_cart, name='add-to-cart'),
@@ -29,11 +29,12 @@ urlpatterns = [
     path("signup", views.signup, name='signup'),
     path('orders/', views.orderbyuser, name='orders'),
     path('contact/', views.contact, name='contact'),
-    path('contactall/', views.contactall, name='contactall'),
+    path('adminpage/contact/', views.contactall, name='adminpagecontact'),
     path('profile/', views.profile, name='profile'),
-    path('profileall/', views.profileall, name='profileall'),
+    path('adminpage/profile/', views.profileall, name='adminpageprofile'),
     path('updateprofile/', views.updateprofile, name='updateprofile'),
     path('search/', views.search, name='search'),
+    path('adminpage/', views.adminpage, name='adminpage'),
 ]
 
 if settings.DEBUG:

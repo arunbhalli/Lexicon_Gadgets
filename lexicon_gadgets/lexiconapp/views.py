@@ -85,8 +85,8 @@ def userlogin(request):
     return render(request, 'lexiconapp/login.html', {'login_form': login_form})
 
 
-@user_passes_test(check_admin, login_url='/login')
-def orderall(request):
+@user_passes_test(check_admin,login_url='/login')
+def ordersall(request):
     customer = Customer.objects.all()
     orders = Order.objects.all()
     orderitems = OrderItem.objects.all()
@@ -423,3 +423,6 @@ class CheckoutView(View):
 
 
  
+def adminpage(request):
+    
+    return render(request, 'lexiconapp/adminpage.html')
