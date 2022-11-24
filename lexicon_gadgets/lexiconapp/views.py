@@ -464,7 +464,7 @@ def conforder(request):
     shipping.customer = customer
     shipping.order = order
     shipping.address = street_address
-    shipping.city = country
+    shipping.city = apartment_address
     shipping.state = country
     shipping.zipcode = zip
     shipping.save()
