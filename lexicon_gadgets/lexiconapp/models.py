@@ -64,7 +64,8 @@ class Order(models.Model):
     transaction_id = models.CharField(max_length=100, null=True)
 
     def __str__(self):
-        return str(self.transaction_id)
+        return f"{self.customer} and transactionid {self.transaction_id}"
+
 
 
 class OrderItem(models.Model):
@@ -72,6 +73,20 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+          return  f"{self.product} and quantity {self.quantity}"
+    def get_total_item_price(self):
+        return self.quantity*self.product.price
+    def get_final_price(self):
+        item_price=self.get_total_item_price
+        return item_price 
+    @property
+    def get_total(self):
+          total = 0
+          for order_item in self.product.all():
+             total += order_item.get_total_item_price() 
+          return total,print(total)
     
 class BasketItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -160,6 +175,7 @@ class UserUpdateForm(forms.ModelForm):
 
 class CheckoutAddress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     street_address = models.CharField(max_length=100)
     apartment_address = models.CharField(max_length=100)
     country = CountryField(multiple=False)
@@ -167,3 +183,4 @@ class CheckoutAddress(models.Model):
 
     def __str__(self):
         return self.user.username
+    

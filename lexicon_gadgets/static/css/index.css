@@ -2,7 +2,9 @@
 .cart {
   color: black;
 }
-
+.btn {
+  padding: .55rem 1.5rem .45rem;
+}
 html {
   position: relative;
   min-height: 100%;
@@ -18,14 +20,11 @@ footer {
   height: 160px;
 }
 
-
 h4 {
   color: red;
 }
 
-
-h1{
-
+h1 {
   color: red;
 }
 
