@@ -35,6 +35,9 @@ urlpatterns = [
     path('updateprofile/', views.updateprofile, name='updateprofile'),
     path('search/', views.search, name='search'),
     path('adminpage/', views.adminpage, name='adminpage'),
+    path('conforder/', views.conforder, name='conforder'),
+    # for redirect to the right login page
+    path('accounts/login/', views.userlogin, name='accountslogin'),
 ]
 
 if settings.DEBUG:
