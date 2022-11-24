@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
-    'lexiconapp',
+    'lexiconapp', 
+    'django_countries',
 ]
 
 # 1 pip install bcrypt
@@ -95,7 +96,7 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
     'django.contrib.auth.hashers.BCryptPasswordHasher',
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    
+
 ]
 
 AUTH_PASSWORD_VALIDATORS = [

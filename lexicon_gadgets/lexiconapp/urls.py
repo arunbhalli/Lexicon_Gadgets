@@ -1,9 +1,12 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from lexiconapp import views
-from .views import OrderSummaryView
+from .views import *
 from django.urls import path
-from .views import ItemDetailView
+from .views import CheckoutView
+
+
+from django.urls import path
 urlpatterns = [
     path('', views.index, name='base'),
     path('orderall/', views.orderall, name='orderall'),
@@ -16,6 +19,7 @@ urlpatterns = [
          views.remove_single_item_from_cart, name='remove-single-item-from-cart'),
     path('card/', views.card, name='card'),
     path('order-summary/', OrderSummaryView.as_view(), name='order-summary'),
+    path('checkout/', CheckoutView.as_view(), name='checkout'),
     path('lexiconapp/add/', views.add, name='add'),
     path('lexiconapp/add/addrecord/', views.addrecord, name='addrecord'),
     path('lexiconapp/delete/<str:slug>', views.delete, name='delete'),
@@ -34,4 +38,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+                          document_root = settings.MEDIA_ROOT)

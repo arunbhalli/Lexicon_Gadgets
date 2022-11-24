@@ -1,15 +1,16 @@
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from .forms import CheckoutForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from lexiconapp.models import *
 from lexiconapp import forms
 from django.contrib.auth.forms import UserChangeForm
-from .models import ProfileUpdateForm, UserUpdateForm
+from .models import ProfileUpdateForm, UserUpdateForm, CheckoutAddress
 from django.urls import reverse
-from django.views.generic import View,ListView, DetailView
+from django.views.generic import View, DetailView
 from django.template import loader
 # Create your views here.
 
@@ -379,4 +380,46 @@ class OrderSummaryView(View):
             messages.warning(self.request, "You do not have an active order")
             return redirect(self.request, 'lexiconapp/order_summary.html')
        
-    
+
+class CheckoutView(View):
+    def get(self, *args, **kwargs):
+        form = CheckoutForm()
+        context = {
+            'form': form
+        }
+        return render(self.request, 'lexiconapp/checkout.html', context)
+
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST or None)
+        
+        try:
+            order = Order.objects.get(user=self.request.user, complete=False)
+            if form.is_valid():
+                street_address = form.cleaned_data.get('street_address')
+                apartment_address = form.cleaned_data.get('apartment_address')
+                country = form.cleaned_data.get('country')
+                zip = form.cleaned_data.get('zip')
+                same_billing_address = form.cleaned_data.get('same_billing_address')
+                save_info = form.cleaned_data.get('save_info')
+                payment_option = form.cleaned_data.get('payment_option')
+
+                checkout_address = CheckoutAddress(
+                    user=self.request.user,
+                    street_address=street_address,
+                    apartment_address=apartment_address,
+                    country=country,
+                    zip=zip
+                )
+                checkout_address.save()
+                order.checkout_address = checkout_address
+                order.save()
+                return redirect('checkout')
+            messages.warning(self.request, "Failed Checkout")
+            return redirect('checkout')
+
+        except ObjectDoesNotExist:
+            messages.error(self.request, "You do not have an order")
+            return redirect("order-summary")
+
+
+ 

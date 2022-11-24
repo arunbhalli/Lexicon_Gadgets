@@ -20,9 +20,14 @@
             <td>{{ order_item.item.title }}</td>
             <td>{{ order_item.item.price }}</td>
             <td>
-              <a href="{% url 'add-to-cart' order_item.item.slug %}" ><i class="bi bi-plus" ></i></a>
+              <a href="{% url 'add-to-cart' order_item.item.slug %}"
+                ><i class="bi bi-plus"></i
+              ></a>
               {{ order_item.quantity }}
-              <a href="{% url 'remove-single-item-from-cart' order_item.item.slug %}"><i class="bi bi-dash"></i></a>
+              <a
+                href="{% url 'remove-single-item-from-cart' order_item.item.slug %}"
+                ><i class="bi bi-dash"></i
+              ></a>
             </td>
             <td>
               ${{ order_item.get_total_item_price }}
@@ -41,29 +46,26 @@
           <tr>
             <td colspan="5">
               <a class="btn btn-primary float-right" href="{% url 'card' %}">
-                Continue shopping</a>
+                Continue shopping</a
+              >
             </td>
           </tr>
-          {% endfor %}
-          {% if object.get_total %}
+          {% endfor %} {% if object.get_total %}
           <tr>
             <td colspan="4"><b>Order Total</b></td>
             <td><b>${{ object.get_total}}</b></td>
           </tr>
           <tr>
             <td colspan="5">
-              <a class="btn btn-warning float-right ml-2" href="/checkout/"
-                >Proceed to checkout</a
+              <a
+                class="btn btn-warning float-right ml-2"
+                href="{% url 'checkout' %}"
+              >
+                Proceed to checkout</a
               >
               <a class="btn btn-primary float-right" href="{% url 'card' %}"
                 >Continue shopping</a
               >
-              <a
-                href="{{ object.get_remove_from_cart_url }}"
-                class="btn btn-danger btn-md my-0 p"
-              >
-                Remove from cart
-              </a>
             </td>
           </tr>
           {% endif %}

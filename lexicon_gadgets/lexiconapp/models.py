@@ -1,4 +1,5 @@
 from django.db import models
+from django_countries.fields import CountryField
 from django.contrib.auth.models import User
 from django import forms
 from django.template.defaultfilters import slugify 
@@ -67,11 +68,7 @@ class OrderItem(models.Model):
     def get_final_price(self):
         item_price=self.get_total_item_price
         return item_price
-    # def get_total(self):
-    #       total = 0
-    #       for order_item in self.items.all():
-    #            total += order_item.get_final_price()
-    #       return print(total)
+
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     items = models.ManyToManyField(OrderItem)
@@ -102,6 +99,7 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return self.address
+
 
 
 class Contact(models.Model):
@@ -140,24 +138,14 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['email']
 
-# class Basket(models.Model):
-#             user = models.ForeignKey(User, on_delete=models.CASCADE)
-#             product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#             quantity=models.IntegerField()
-#             pass
-#             def __str__(self):
-#                     return self.title
 
 
-# class Oreder(models.Model):
+class CheckoutAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    street_address = models.CharField(max_length=100)
+    apartment_address = models.CharField(max_length=100)
+    country = CountryField(multiple=False)
+    zip = models.CharField(max_length=100)
 
-#             order_number=models.IntegerField()
-#             products = models.ManyToManyField(Basket)
-#             ordered = models.BooleanField(default=False)
-#             user = models.ForeignKey(User, on_delete=models.CASCADE)
-#             start_date = models.DateTimeField(auto_now_add=True)
-#             oredered_date=models.DateTimeField()
-#             user_discount=models.DecimalField()
-#             total_price=models.IntegerField()
-#             def __str__(self):
-#                     return self.user.username
+    def __str__(self):
+        return self.user.username
