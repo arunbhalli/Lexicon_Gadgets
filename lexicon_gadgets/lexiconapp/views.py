@@ -12,6 +12,7 @@ from .models import ProfileUpdateForm, UserUpdateForm, CheckoutAddress
 from django.urls import reverse
 from django.views.generic import View, DetailView
 from django.template import loader
+from django.utils.crypto import get_random_string
 # Create your views here.
 
 
@@ -293,12 +294,12 @@ class ItemDetailView(DetailView):
 
 def add_to_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
-    order_item, created = OrderItem.objects.get_or_create(
+    order_item, created = BasketItem.objects.get_or_create(
         item=item,
         user=request.user,
         complete=False
     )
-    order_qs = Order.objects.filter(user=request.user, complete=False)
+    order_qs = BasketOrder.objects.filter(user=request.user, complete=False)
     if order_qs:
         order = order_qs[0]
         if order.items.filter(item__slug=item.slug):
@@ -313,7 +314,7 @@ def add_to_cart(request, slug):
             messages.info(request, "This item  was added to your basket")
             return redirect('product-view', slug=slug)
     else:
-        order = Order.objects.create(user=request.user)
+        order = BasketOrder.objects.create(user=request.user)
         order.items.add(order_item)
         messages.info(request, "This item  was added to your basket")
         return redirect('product-view', slug=slug)
@@ -322,11 +323,11 @@ def add_to_cart(request, slug):
 
 def remove_from_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
-    order_qs = Order.objects.filter(user=request.user, complete=False)
+    order_qs = BasketOrder.objects.filter(user=request.user, complete=False)
     if order_qs.exists():
         order = order_qs[0]
         if order.items.filter(item__slug=item.slug).exists():
-            order_item = OrderItem.objects.filter(
+            order_item = BasketItem.objects.filter(
                 item=item,
                 user=request.user,
                 complete=False
@@ -345,11 +346,11 @@ def remove_from_cart(request, slug):
 @login_required
 def remove_single_item_from_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
-    order_qs = Order.objects.filter(user=request.user, complete=False)
+    order_qs = BasketOrder.objects.filter(user=request.user, complete=False)
     if order_qs.exists():
         order = order_qs[0]
         if order.items.filter(item__slug=item.slug).exists():
-            order_item = OrderItem.objects.filter(
+            order_item = BasketItem.objects.filter(
                 item=item,
                 user=request.user,
                 complete=False
@@ -371,7 +372,7 @@ def remove_single_item_from_cart(request, slug):
 class OrderSummaryView(View):
     def get(self, *args, **kwargs):
         try:
-            order = Order.objects.get(user=self.request.user, complete=False)
+            order = BasketOrder.objects.get(user=self.request.user, complete=False)
             context = {
                 'object': order
             }
@@ -393,7 +394,7 @@ class CheckoutView(View):
         form = CheckoutForm(self.request.POST or None)
         
         try:
-            order = Order.objects.get(user=self.request.user, complete=False)
+            order = BasketOrder.objects.get(user=self.request.user, complete=False)
             if form.is_valid():
                 street_address = form.cleaned_data.get('street_address')
                 apartment_address = form.cleaned_data.get('apartment_address')
@@ -413,7 +414,7 @@ class CheckoutView(View):
                 checkout_address.save()
                 order.checkout_address = checkout_address
                 order.save()
-                return redirect('checkout')
+                return redirect('conforder')
             messages.warning(self.request, "Failed Checkout")
             return redirect('checkout')
 
@@ -421,6 +422,57 @@ class CheckoutView(View):
             messages.error(self.request, "You do not have an order")
             return redirect("order-summary")
 
+def conforder(request):
+    basketorders = BasketOrder.objects.filter(user=request.user)
+    basketitems = BasketItem.objects.filter(user=request.user)
+    customer = Customer.objects.get(name=request.user)
+    product = []
+    quantity = []
+    transaction_id = get_random_string(length=32)
+    for basketorder in basketorders:
+        
+        user = basketorder.user
+        orderitems = basketorder.items
+        date_ordered = basketorder.date_ordered
+        # print(basketorder)
+
+
+    count=0
+    for basketitem in basketitems:
+        
+        product.insert(count,basketitem.item)
+        quantity.insert(count,basketitem.quantity)
+        count=+1
+    
+    
+    
+    order = Order()
+    order.customer = customer
+    # order.date_ordered = date_ordered
+    order.complete = True
+    order.transaction_id = transaction_id
+    order.save()
+    
+    
+    count=0
+    for i in product:
+        if count <= len(product):
+            orderitem = OrderItem()
+            orderitem.order = order
+            orderitem.product = product[count]
+            orderitem.quantity = quantity[count]
+            orderitem.save()
+            count=+1
+
+    
+     
+
+    basketorders.delete()
+    basketitems.delete()
+
+    print(product,quantity)
+    print(transaction_id)
+    return redirect('userlogin')
 
  
 def adminpage(request):

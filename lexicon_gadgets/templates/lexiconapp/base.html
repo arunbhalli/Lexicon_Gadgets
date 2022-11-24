@@ -71,12 +71,14 @@
               <a class="nav-link" href="{% url 'add' %}">Add-Product</a>
             </li>
             {% endif %}
-            <li class="nav-item">
+            {% if user.is_authenticated %}
+             <li class="nav-item">
               <a  href="{% url 'order-summary' %}" class="nav-link waves-effect">
                 <span class="badge red z-depth-1 mr-1" style="color:red;">{{ request.user|cart_item_count }} </span>
                 <i class="bi bi-cart-check"></i>
               </a>
-            </li>
+            </li> 
+            {% endif %}
           </ul>
           <form class="d-flex" methode="post" action="/search">
             <input
