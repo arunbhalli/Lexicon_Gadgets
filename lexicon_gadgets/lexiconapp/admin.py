@@ -6,6 +6,8 @@ from lexiconapp.models import *
 
 admin.site.register(Product)
 admin.site.register(Profile)
+admin.site.register(BasketItem)
+admin.site.register(BasketOrder)
 admin.site.register(Order)
 admin.site.register(Customer)
 admin.site.register(OrderItem)

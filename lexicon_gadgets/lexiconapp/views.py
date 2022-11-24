@@ -293,12 +293,12 @@ class ItemDetailView(DetailView):
 
 def add_to_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
-    order_item, created = OrderItem.objects.get_or_create(
+    order_item, created = BasketItem.objects.get_or_create(
         item=item,
         user=request.user,
         complete=False
     )
-    order_qs = Order.objects.filter(user=request.user, complete=False)
+    order_qs = BasketOrder.objects.filter(user=request.user, complete=False)
     if order_qs:
         order = order_qs[0]
         if order.items.filter(item__slug=item.slug):
@@ -313,7 +313,7 @@ def add_to_cart(request, slug):
             messages.info(request, "This item  was added to your basket")
             return redirect('product-view', slug=slug)
     else:
-        order = Order.objects.create(user=request.user)
+        order = BasketOrder.objects.create(user=request.user)
         order.items.add(order_item)
         messages.info(request, "This item  was added to your basket")
         return redirect('product-view', slug=slug)
@@ -322,11 +322,11 @@ def add_to_cart(request, slug):
 
 def remove_from_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
-    order_qs = Order.objects.filter(user=request.user, complete=False)
+    order_qs = BasketOrder.objects.filter(user=request.user, complete=False)
     if order_qs.exists():
         order = order_qs[0]
         if order.items.filter(item__slug=item.slug).exists():
-            order_item = OrderItem.objects.filter(
+            order_item = BasketItem.objects.filter(
                 item=item,
                 user=request.user,
                 complete=False
@@ -345,11 +345,11 @@ def remove_from_cart(request, slug):
 @login_required
 def remove_single_item_from_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
-    order_qs = Order.objects.filter(user=request.user, complete=False)
+    order_qs = BasketOrder.objects.filter(user=request.user, complete=False)
     if order_qs.exists():
         order = order_qs[0]
         if order.items.filter(item__slug=item.slug).exists():
-            order_item = OrderItem.objects.filter(
+            order_item = BasketItem.objects.filter(
                 item=item,
                 user=request.user,
                 complete=False
@@ -371,7 +371,7 @@ def remove_single_item_from_cart(request, slug):
 class OrderSummaryView(View):
     def get(self, *args, **kwargs):
         try:
-            order = Order.objects.get(user=self.request.user, complete=False)
+            order = BasketOrder.objects.get(user=self.request.user, complete=False)
             context = {
                 'object': order
             }
@@ -393,7 +393,7 @@ class CheckoutView(View):
         form = CheckoutForm(self.request.POST or None)
         
         try:
-            order = Order.objects.get(user=self.request.user, complete=False)
+            order = BasketOrder.objects.get(user=self.request.user, complete=False)
             if form.is_valid():
                 street_address = form.cleaned_data.get('street_address')
                 apartment_address = form.cleaned_data.get('apartment_address')
