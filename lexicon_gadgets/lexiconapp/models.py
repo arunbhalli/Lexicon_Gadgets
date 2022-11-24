@@ -1,43 +1,52 @@
 from django.db import models
+from django_countries.fields import CountryField
 from django.contrib.auth.models import User
 from django import forms
-
+from django.template.defaultfilters import slugify 
+from django.shortcuts import reverse
 # Create your models here.
-
+CATEGORIES = (
+        ('CO','Computers'),
+        ('HA','Home Aplliances'),
+        ('MS','Mobiles & Smartwatch'),
+        ('S','Sound')
+    )
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     price = models.FloatField()
     brand = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
+    category = models.CharField(choices=CATEGORIES,max_length=255)
     images = models.URLField(max_length=255)
-
+    slug = models.SlugField()
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse("product-view", kwargs={
+            'slug': self.slug
+        })
+    def get_add_to_cart_url(self):
+         return reverse("add-to-cart", kwargs={
+            'slug': self.slug
+        })
+         
+    def get_remove_from_cart_url(self):
+         return reverse("remove-from-cart", kwargs={
+            'slug': self.slug
+        })  
+             
 
+       
+        
+    
+    
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
 
-# class Basket(models.Model):
-#             user = models.ForeignKey(User, on_delete=models.CASCADE)
-#             product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#             quantity=models.IntegerField()
-#             pass
-#             def __str__(self):
-#                     return self.title
-
-
-# class Oreder(models.Model):
-
-#             order_number=models.IntegerField()
-#             products = models.ManyToManyField(Basket)
-#             ordered = models.BooleanField(default=False)
-#             user = models.ForeignKey(User, on_delete=models.CASCADE)
-#             start_date = models.DateTimeField(auto_now_add=True)
-#             oredered_date=models.DateTimeField()
-#             user_discount=models.DecimalField()
-#             total_price=models.IntegerField()
-#             def __str__(self):
-#                     return self.user.username
 
 
 class Customer(models.Model):
@@ -46,23 +55,37 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
-
+class OrderItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    complete = models.BooleanField(default=False)
+    item = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField(default=1)
+    date_added = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return  f"{self.item}"
+    def get_total_item_price(self):
+        return self.quantity*self.item.price
+    def get_final_price(self):
+        item_price=self.get_total_item_price
+        return item_price
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    items = models.ManyToManyField(OrderItem)
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=100, null=True)
 
     def __str__(self):
-        return str(self.transaction_id)
+        return str(self.user)
+    @property
+    def get_total(self):
+          total = 0
+          for order_item in self.items.all():
+             total += order_item.get_total_item_price() 
+          return total
 
 
-class OrderItem(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
-    quantity = models.IntegerField(default=0, null=True, blank=True)
-    date_added = models.DateTimeField(auto_now_add=True)
 
 
 class ShippingAddress(models.Model):
@@ -76,6 +99,7 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return self.address
+
 
 
 class Contact(models.Model):
@@ -114,3 +138,14 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['email']
 
+
+
+class CheckoutAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    street_address = models.CharField(max_length=100)
+    apartment_address = models.CharField(max_length=100)
+    country = CountryField(multiple=False)
+    zip = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.user.username

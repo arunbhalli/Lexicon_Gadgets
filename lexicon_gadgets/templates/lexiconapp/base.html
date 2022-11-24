@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+{% load cart_template_tags %}
 {% load static %}
 
 <html>
@@ -71,13 +71,12 @@
               <a class="nav-link" href="{% url 'add' %}">Add-Product</a>
             </li>
             {% endif %}
-            <a
-              class="btn btn-outline-light btn-floating m-1 cart"
-              href="#!"
-              role="button"
-            >
-              <i class="bi bi-cart-check"></i
-            ></a>
+            <li class="nav-item">
+              <a  href="{% url 'order-summary' %}" class="nav-link waves-effect">
+                <span class="badge red z-depth-1 mr-1" style="color:red;">{{ request.user|cart_item_count }} </span>
+                <i class="bi bi-cart-check"></i>
+              </a>
+            </li>
           </ul>
           <form class="d-flex" methode="post" action="/search">
             <input
@@ -110,6 +109,9 @@
     <h1> This our home page</h1>
       {% endblock %}
     </div>
+    {% block js %}
+    
+    {% endblock %}
   </body>
 <html lang="en">
 </html>

@@ -10,12 +10,12 @@
     <p class="card-item">Quantity:{{orderitem.quantity}}</p>
     {% endif %}
     {% endfor %}
-    {% for shipping in shippingaddress %}
+    {% comment %} {% for shipping in shippingaddress %}
     {% if order == shipping.order %}
     <p class="card-item">address:{{shipping.address}}</p>
     <p class="card-item">zipcode:{{shipping.zipcode}}</p>
     {% endif %}
-    {% endfor %}
+    {% endfor %} {% endcomment %}
 </div>
 {% endfor %}
 </div>
