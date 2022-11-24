@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
   </head>
   <body  >
-   
+   <div>
     {% comment %} <nav class="navbar navbar-dark bg-dark"> {% endcomment %}
     <nav  class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" >
       <div class="container-fluid">
@@ -100,7 +100,7 @@
         </div>
       </div>
     </nav>
-    
+  
     {% for message in messages  %}            
     <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
           <strong>Message : </strong> {{ message }}
@@ -113,59 +113,58 @@
     <div >
   
       {% block body_block %}
-    <h1> This our home page</h1>
-    <h4>hiiiiiiii</h4>
+ 
       {% endblock %}
+      <!-- Footer -->
+   </div>
+   <footer class="bg-dark text-center text-white">
+    <!-- Grid container -->
+    <div class="container p-4 pb-0">
+      <!-- Section: Social media -->
+      <section class="mb-4">
+        <!-- Facebook -->
+        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+          ><i class="fab fa-facebook-f"></i
+        ></a>
+  
+        <!-- Twitter -->
+        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+          ><i class="fab fa-twitter"></i
+        ></a>
+  
+        <!-- Google -->
+        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+          ><i class="fab fa-google"></i
+        ></a>
+  
+        <!-- Instagram -->
+        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+          ><i class="fab fa-instagram"></i
+        ></a>
+  
+        <!-- Linkedin -->
+        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+          ><i class="fab fa-linkedin-in"></i
+        ></a>
+  
+        <!-- Github -->
+        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+          ><i class="fab fa-github"></i
+        ></a>
+      </section>
+      <!-- Section: Social media -->
     </div>
-    {% block js %}
-    
-    {% endblock %}
+    <!-- Grid container -->
+  
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      © 2020 Copyright:
+      <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+  </div>
+<!-- Footer -->
   </body>
 <html lang="en">
 </html>
-
-{% comment %} <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        {% comment %} <a class="nav-link active" aria-current="page" href="{% url 'index' %}">index</a> {% endcomment %}
-        {% comment %} <a class="nav-link" href="{% url 'admin:index' %}">Admin</a> {% endcomment %}
-        
-        
-        {% comment %} {% if user.is_authenticated %}
-        <a class="nav-link" href="{% url 'userlogout' %}">logout</a> {% endcomment %}
-
-        {% comment %} {% else %}
-        <a class="nav-link" href="{% url 'userlogin' %}">login</a> {% endcomment %}
-        {% comment %} <a class="nav-link" href="{% url 'register' %}">registraion</a> {% endcomment %}
-        {% comment %} {% endif %} {% endcomment %}
-        {% comment %} <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> {% endcomment %}
-        
-      {% comment %} </div>
-    </div>
-  </div>
-</nav>
-<div class="container-fulid">
-  <div>
-    {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
-      {{ message }}
-    </li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-  </div>
-  
-  {% block body_block %}
-
-  {% endblock %}
->>>>>>> 81bf8a69c14f37568585e4b49887cb9ddcd350c2
-</div> 
-{% endcomment %} 
-
