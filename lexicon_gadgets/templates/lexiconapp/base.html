@@ -23,7 +23,7 @@
   </head>
   <body>
     {% comment %} <nav class="navbar navbar-dark bg-dark"> {% endcomment %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" >
+    <nav  class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" >
       <div class="container-fluid">
         <a class="navbar-brand" href="#">LEXICON GADGETS</a>
         <button
@@ -40,7 +40,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'base' %}">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'card' %}">Products</a>
@@ -107,6 +107,7 @@
   
       {% block body_block %}
     <h1> This our home page</h1>
+    <h4>hiiiiiiii</h4>
       {% endblock %}
     </div>
     {% block js %}
@@ -160,3 +161,4 @@
 >>>>>>> 81bf8a69c14f37568585e4b49887cb9ddcd350c2
 </div> 
 {% endcomment %} 
+
