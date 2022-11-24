@@ -291,7 +291,7 @@ class ItemDetailView(DetailView):
     model = Product
     template_name = "lexiconapp/product.html"
 
-
+@login_required
 def add_to_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
     order_item, created = BasketItem.objects.get_or_create(
@@ -320,7 +320,7 @@ def add_to_cart(request, slug):
         return redirect('product-view', slug=slug)
     return redirect('product-view', slug=slug)
 
-
+@login_required
 def remove_from_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
     order_qs = BasketOrder.objects.filter(user=request.user, complete=False)
@@ -422,6 +422,7 @@ class CheckoutView(View):
             messages.error(self.request, "You do not have an order")
             return redirect("order-summary")
 
+@login_required
 def conforder(request):
     basketorders = BasketOrder.objects.filter(user=request.user)
     basketitems = BasketItem.objects.filter(user=request.user)
