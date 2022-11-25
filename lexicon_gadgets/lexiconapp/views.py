@@ -36,7 +36,6 @@ def signup(request):
         pass1 = request.POST.get('pass1')
         pass2 = request.POST.get('pass2')
         if pass1 != pass2:
-
             messages.error(
                 request, "Password does not Match,Please Try Again!")
             return redirect('/signup')
@@ -379,7 +378,7 @@ class OrderSummaryView(View):
             return render(self.request, 'lexiconapp/order_summary.html', context)
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order")
-            return redirect(self.request, 'lexiconapp/order_summary.html')
+            return redirect('card')
        
 
 class CheckoutView(View):
