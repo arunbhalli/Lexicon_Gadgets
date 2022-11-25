@@ -1,16 +1,20 @@
 {% extends 'lexiconapp/base.html' %} {% block body_block %}
 <div>
   {% if user.is_authenticated %}
-  <h1>thank you for login {{user}}</h1>
+  <h1>Welcome {{user}}</h1>
   {% else %}
-  <h1>login here</h1>
-  <form enctype="multipart/form-data" method="post">
+  <h2 class="container "> Please Login </h2>
+  <div class="container  border">
+    <form enctype="multipart/form-data" method="post" class="form">
     {% csrf_token %} {{ login_form.as_p }}
-    <input type="submit" value="Login" />
+    <input class="form-input"  type="submit" value="Login" />
   </form>
   <small class="text-muted ml-2">
     <a href="{% url 'password_reset' %}">Forgot Password?</a>
   </small>
   {% endif %}
 </div>
+  </div>
+</div>
+  
 {% endblock %}
