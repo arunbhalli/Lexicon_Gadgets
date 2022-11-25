@@ -1,0 +1,80 @@
+{% extends 'lexiconapp/base.html' %}{% load crispy_forms_tags %} {% block body_block %} 
+<main>
+  <div class="container wow fadeIn">
+    <h2 class="my-5 h2 text-center">Checkout form</h2>
+    <div class="row">
+      <div class="col-md-8 mb-4">
+        <div class="card">
+          <form method="POST" class="card-body">
+            {% csrf_token %}
+            <div class="hideable_shipping_form">
+              <div class="md-form mb-5">
+                {{form.street_address}}
+                <label for="shipping_address" >Street Address</label>
+              </div>
+              <div class="md-form mb-5">
+                {{form.apartment_address}}
+                <label for="shipping_address2" class=""
+                  >Apartment Address</label
+                >
+              </div>
+
+              <div class="row">
+                <div class="col-lg-4 col-md-12 mb-4">
+                  <label for="country">Country</label>
+                  {{ form.country }}
+                  <div class="invalid-feedback">
+                    Please select a valid country.
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                  <label for="shipping_zip">Zip</label>
+                 {{ form.zip}}
+                  <div class="invalid-feedback">Zip code required.</div>
+                </div>
+              </div>
+              <div class="custom-control custom-checkbox">
+                {{ form.same_billing_address}}
+                <label class="custom-control-label" for="same_billing_address"
+                  >Billing address is the same as my shipping address</label
+                >
+              </div>
+              <div class="custom-control custom-checkbox">
+                {{ form.save_info}}
+                <label class="custom-control-label" for="set_default_shipping"
+                  >Save as default shipping address</label
+                >
+              </div>
+            </div>
+            <hr />
+            <div class="hideable_billing_form">
+             <h3>Payment option</h3>
+            <div class="d-block my-3">
+              {% for value, name in form.fields.payment_option.choices %}
+              <div class="custom-control custom-radio">
+                <input
+                  id="{{ name }}"
+                  name="payment_option"
+                  value="{{ value }}"
+                  type="radio"
+                  class="custom-control-input"
+                  required
+                />
+                <label class="custom-control-label" for="{{ name }}"
+                  >{{ name }}</label
+                >
+              </div>
+              {% endfor %}
+            </div>
+
+            <hr class="mb-4" />
+            <button class="btn btn-primary btn-lg btn-block" type="submit">
+              Continue to checkout
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

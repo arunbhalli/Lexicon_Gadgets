@@ -1,0 +1,23 @@
+{% extends 'lexiconapp/base.html' %} {% block body_block %}
+<div>
+{% for order in orders %}
+<div class="card" style="width: 18rem">
+    <div class="card-body">
+    <h5 class="card-title">{{order.transaction_id}}</h5>
+    {% for orderitem in orderitems %}
+    {% if order == orderitem.order %}
+    <p class="card-item">{{orderitem.product}}</p>
+    <p class="card-item">Quantity:{{orderitem.quantity}}</p>
+    {% endif %}
+    {% endfor %}
+    {% comment %} {% for shipping in shippingaddress %}
+    {% if order == shipping.order %}
+    <p class="card-item">address:{{shipping.address}}</p>
+    <p class="card-item">zipcode:{{shipping.zipcode}}</p>
+    {% endif %}
+    {% endfor %} {% endcomment %}
+</div>
+{% endfor %}
+</div>
+{% endblock %}
+<!-- test -->
