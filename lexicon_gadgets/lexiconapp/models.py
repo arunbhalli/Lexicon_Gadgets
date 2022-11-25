@@ -88,6 +88,12 @@ class OrderItem(models.Model):
              total += order_item.get_total_item_price() 
           return total,print(total)
     
+    # def get_total(self):
+    #       total = 0
+    #       for i in range(self.quantity):
+    #          total += int(self.get_total_item_price())
+    #       return total
+    
 class BasketItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     complete = models.BooleanField(default=False)
