@@ -18,8 +18,8 @@ urlpatterns = [
     path("card1/remove-single-item-from-cart/<str:slug>",
          views.remove_single_item_from_cart, name='remove-single-item-from-cart'),
     path('card/', views.card, name='card'),
-    path('order-summary/', OrderSummaryView.as_view(), name='order-summary'),
-    path('checkout/', CheckoutView.as_view(), name='checkout'),
+    path('order-summary/', login_required(OrderSummaryView.as_view()), name='order-summary'),
+    path('checkout/', login_required(CheckoutView.as_view()), name='checkout'),
     path('lexiconapp/add/', views.add, name='add'),
     path('lexiconapp/add/addrecord/', views.addrecord, name='addrecord'),
     path('lexiconapp/delete/<str:slug>', views.delete, name='delete'),
@@ -35,7 +35,9 @@ urlpatterns = [
     path('updateprofile/', views.updateprofile, name='updateprofile'),
     path('search/', views.search, name='search'),
     path('adminpage/', views.adminpage, name='adminpage'),
-    path('conforder/',views.conforder,name='conforder')
+    path('conforder/', views.conforder, name='conforder'),
+    # for redirect to the right login page
+    path('accounts/login/', views.userlogin, name='accountslogin'),
 ]
 
 if settings.DEBUG:
