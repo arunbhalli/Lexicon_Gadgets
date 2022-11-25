@@ -470,15 +470,15 @@ def conforder(request):
     shipping.save()
 
     
-    count=0
-    for i in product:
+    count= 0
+    for i in range(len(product)):
         if count <= len(product):
             orderitem = OrderItem()
             orderitem.order = order
-            orderitem.product = product[count]
-            orderitem.quantity = quantity[count]
+            orderitem.product = product[i]
+            orderitem.quantity = quantity[i]
             orderitem.save()
-            count=+1
+
 
     
      

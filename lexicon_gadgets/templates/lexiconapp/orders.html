@@ -1,6 +1,6 @@
 {% extends 'lexiconapp/base.html' %} {% block body_block %}
 <div>
-  
+
   {% for order in orders %}
   <div>
     <div class="card-body">
@@ -26,15 +26,19 @@
                       Receipt
                     </p>
                     <p class="small text-muted mb-0">
-                      Transactiob Id :{{order.transaction_id}}
+                      Transaction Id :{{order.transaction_id}}
                     </p>
                   </div>
+                  
                   <div class="card shadow-0 border mb-4">
                     <div class="card-body">
+                      {% for orderitem in orderitems %}
+                      {% if order == orderitem.order %}
                       <div class="row">
                         <div
                           class="col-md-2 text-center d-flex justify-content-center align-items-center"
                         >
+                        
                           <p class="text-muted mb-0">{{orderitem.product}}</p>
                         </div>
                         <div
@@ -66,6 +70,9 @@
                         class="mb-4"
                         style="background-color: #e0e0e0; opacity: 1"
                       />
+                      
+                      {% endif %}
+                      {% endfor %}
                       <div class="row d-flex align-items-center">
                         <div class="col-md-2">
                           <p class="text-muted mb-0 small">Track Order</p>
@@ -100,29 +107,36 @@
                       </div>
                     </div>
                   </div>
+                  {% for shipping in shippingaddress %}
+                  {% if order == shipping.order %}
                   <div>
                     <div class="d-flex justify-content-between pt-2">
                       <p class="fw-bold mb-0">Delivery Address</p>
                     </div>
 
                     <div class="d-flex justify-content-between pt-2">
-                      <p class="text-muted mb-0">Street Address : 788152</p>
+                      <p class="text-muted mb-0">Street Address : {{shipping.address}}</p>
                     </div>
 
                     <div class="d-flex justify-content-between">
-                      <p class="text-muted mb-0">Apartment : 123</p>
+                      <p class="text-muted mb-0">Address : {{shipping.city}}</p>
                     </div>
                     <div class="d-flex justify-content-between">
-                      <p class="text-muted mb-0">Country : 123</p>
+                      <p class="text-muted mb-0">Country : {{shipping.state}}</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <p class="text-muted mb-0">Country : {{shipping.date_added}}</p>
                     </div>
 
                     <div class="d-flex justify-content-between mb-5">
-                      <p class="text-muted mb-0">Area Code: 12345</p>
+                      <p class="text-muted mb-0">Zip Code: {{shipping.zipcode}}</p>
                       <p class="text-muted mb-0">
                         <span class="fw-bold me-4">Delivery Charges</span> Free
                       </p>
                     </div>
                   </div>
+                  {% endif %}
+                  {% endfor %}
                 </div>
                 <div
                   class="card-footer border-0 px-4 py-5"
@@ -136,7 +150,6 @@
                     class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0"
                   >
                     Total paid: <span class="h2 mb-0 ms-2">${{orderitem.get_total_item_price}}</span>
-                    {% comment %} Total paid: <span class="h2 mb-0 ms-2">${{orderitem.get_total}}</span> {% endcomment %}
                   </h5>
                 </div>
               </div>
@@ -144,12 +157,8 @@
           </div>
         </div>
       </section>
-      {% endif %} {% endfor %} {% comment %} {% for shipping in shippingaddress
-      %} {% if order == shipping.order %}
-      <p class="card-item">address:{{shipping.user}}</p>
-      <p class="card-item">zipcode:{{shipping.zip}}</p>
+      {% endif %} {% endfor %}
 
-      {% endif %} {% endfor %} {% endcomment %}
     </div>
     {% endfor %}
   </div>
