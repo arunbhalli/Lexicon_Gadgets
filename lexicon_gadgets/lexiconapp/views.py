@@ -99,7 +99,7 @@ def ordersall(request):
         'orderitems': orderitems,
         'shippingaddress': shippingaddress,
     }
-    return render(request, 'lexiconapp/orders.html', context)
+    return render(request, 'lexiconapp/orderall.html', context)
 
 
 @login_required
