@@ -11,8 +11,9 @@
         <div class="carousel-item active">
           <img
             src="https://png.pngtree.com/background/20210714/original/pngtree-black-friday-sale-website-concept-banner-background-with-shopping-cart-picture-image_1242736.jpg"
-            class="d-block w-100"
+            class="d-block w-100 h-100"
             alt="..."
+            style="width: 10rem; height:10rem"
           />
         </div>
         <div class="carousel-item">
@@ -79,12 +80,8 @@
               >ADD</a
             >
             {% if user.is_superuser %}
-            <a href="{% url 'update' item.slug %}" class="btn-primary"
-              >Edit product</a
-            >
-            <a href="{% url 'delete' item.slug %}" class="btn-primary"
-              >Delete product</a
-            >
+            <a  class=" btn position-absolute bottom-0 start-0" href="{% url 'update' item.slug %}">Edit </a> 
+            <a  class="btn position-absolute bottom-0 end-0" href="{% url 'delete' item.slug %}">Delete </a>
             {% else %} {% endif %}
           </div>
         </div>
