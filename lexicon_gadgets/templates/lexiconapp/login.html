@@ -3,7 +3,7 @@
   {% if user.is_authenticated %}
   <h1>thank you for login {{user}}</h1>
   {% else %}
-  <h1>login here</h1>
+  <h2>login here</h2>
   <form enctype="multipart/form-data" method="post">
     {% csrf_token %} {{ login_form.as_p }}
     <input type="submit" value="Login" />
