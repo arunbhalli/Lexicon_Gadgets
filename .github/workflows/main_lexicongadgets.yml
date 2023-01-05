@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v1
       with:
         registry: https://mcr.microsoft.com/
-        username: ${{ secrets.AzureAppService_ContainerUsername_233ca58bf8e242fcbcd515385e489c58 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_97b8218b572d4617bf9a162081d7257d }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_5e9234b514544867b8772853414c0c0b }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_132ad46d3def4912ad4ef2bdf39cf1a8 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: mcr.microsoft.com/${{ secrets.AzureAppService_ContainerUsername_233ca58bf8e242fcbcd515385e489c58 }}/azure-app-service/windows/parkingpage:${{ github.sha }}
+        tags: mcr.microsoft.com/${{ secrets.AzureAppService_ContainerUsername_5e9234b514544867b8772853414c0c0b }}/azure-app-service/windows/parkingpage:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'lexicongadgets'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_133be71a97c5455f810fd78c5b594b5c }}
-        images: 'mcr.microsoft.com/${{ secrets.AzureAppService_ContainerUsername_233ca58bf8e242fcbcd515385e489c58 }}/azure-app-service/windows/parkingpage:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_4dee2ebb222d4259bcbc7ab280503d55 }}
+        images: 'mcr.microsoft.com/${{ secrets.AzureAppService_ContainerUsername_5e9234b514544867b8772853414c0c0b }}/azure-app-service/windows/parkingpage:${{ github.sha }}'
